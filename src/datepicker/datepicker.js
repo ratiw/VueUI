@@ -3,19 +3,21 @@
 */
 
 VueUI.component('vue-datepicker', {
+    props: ['prompt', 'dateLabel'],
+
     template :
         '<div class="vue-datepicker">' +
             '<input class="form-control vue-datepicker-input" type="text" v-on="click:inputClick" v-model="value"/>' +
             '<div class="vue-datepicker-popup" v-style="display:popupDisplay">' +
                 '<div class="vue-datepicker-inner">' +
                     '<div class="vue-datepicker-head">' +
-                        '<div class="vue-datepicker-label">Select date</div>' +
+                        '<div class="vue-datepicker-label">{{prompt}}</div>' +
                     '</div>' +
                     '<div class="vue-datepicker-body">' +
                         '<div class="vue-datepicker-ctrl">' +
                             '<i class="vue-month-btn vue-datepicker-preMonthBtn" v-on="click:preNextMonthClick(0)">&lt;</i>' +
                             '<i class="vue-month-btn vue-datepicker-nextMonthBtn" v-on="click:preNextMonthClick(1)">&gt;</i>' +
-                            '<p>{{stringify(currDate, "{mmm} {yyyy}")}}</p>' +
+                            '<p>{{displayDateLabel(currDate)}}</p>' +
                         '</div>' +
                         '<div class="vue-datepicker-weekRange">' +
                             '<span v-repeat="w:weekRange">{{w}}</span>' +
@@ -33,12 +35,27 @@ VueUI.component('vue-datepicker', {
         return {
             config : {},
             value : '',
-            weekRange : ['1', '2', '3', '4', '5', '6', '7'],
+            prompt : 'Select date',
+            dateLabel : '{mmmm} {yyyy}',
+            weekRange : ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
+            weekRangeTH : ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส', 'อา'],
             dateRange : [], // we need to draw a date range
             currDate : new Date, // the current date
             popupDisplay : 'none',
+            month : [
+                'January', 'February', 'March', 
+                'April', 'May', 'June', 
+                'July', 'August', 'September', 
+                'October', 'November', 'December'
+            ],
+            shortMonth : [
+                'Jan', 'Feb', 'Mar',
+                'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep',
+                'Oct', 'Nov', 'Dec'
+            ],
             monthTH : [
-                'มกราคม', 'กุมภาพันธ์', 'มีนาคา', 
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 
                 'เมษายน', 'พฤษภาคม', 'มิถุนายน', 
                 'กรกฎาคม', 'สิงหาคม', 'กันยายน', 
                 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
@@ -48,18 +65,6 @@ VueUI.component('vue-datepicker', {
                 'เม.ย.', 'พ.ค.', 'มิ.ย.', 
                 'ก.ค.', 'ส.ค.', 'ก.ย.', 
                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
-            ],
-            monthEN : [
-                'January', 'February', 'March', 
-                'April', 'May', 'June', 
-                'July', 'August', 'September', 
-                'October', 'November', 'December'
-            ],
-            shortMonthEN : [
-                'Jan', 'Feb', 'Mar',
-                'Apr', 'May', 'Jun',
-                'Jul', 'Aug', 'Sep',
-                'Oct', 'Nov', 'Dec'
             ]
         }
     },
@@ -77,6 +82,10 @@ VueUI.component('vue-datepicker', {
     methods : {
         inputClick : function (e){
             this.popupDisplay = this.popupDisplay=='none' ? 'block' : 'none'
+        },
+        displayDateLabel: function(date) {
+            var pattern = this.dateLabel || "{mmm} {yyyy}"
+            return this.stringify(date, pattern)
         },
         preNextMonthClick : function (flag){
             var year = this.currDate.getFullYear()
@@ -109,7 +118,7 @@ VueUI.component('vue-datepicker', {
             return {year:year, month:month}
         },
         stringify : function (date, format){
-            format = format || '{dd} {mmm} {yyyy}'
+            format = format || '{dd} {mmmm} {yyyy}'
 
             var year = date.getFullYear()
             var month = date.getMonth() + 1
@@ -117,7 +126,11 @@ VueUI.component('vue-datepicker', {
 
             var dt = format
                 .replace('{yyyy}', year)
-                .replace('{mmm}', this.monthEN[month-1])
+                .replace('{yyyy:th', year + 543)
+                .replace('{mmmm}', this.month[month-1])
+                .replace('{mmmm:th}', this.monthTH[month-1])
+                .replace('{mmm}', this.shortMonth[month-1])
+                .replace('{mmm:th', this.shortMonthTH[month-1])
                 .replace('{mm}', ('0'+month).slice(-2))
                 .replace('{dd}', ('0'+day).slice(-2))
                 .replace('{yy}', year)
