@@ -154,7 +154,7 @@ VueUI.component('vue-datepicker', {
                         '<div class="vue-datepicker-ctrl">' +
                             '<i class="vue-month-btn vue-datepicker-preMonthBtn" v-on="click:preNextMonthClick(0)">&lt;</i>' +
                             '<i class="vue-month-btn vue-datepicker-nextMonthBtn" v-on="click:preNextMonthClick(1)">&gt;</i>' +
-                            '<p>{{stringify(currDate, "yyyy年MM月")}}</p>' +
+                            '<p>{{stringify(currDate, "{mmm} {yyyy}")}}</p>' +
                         '</div>' +
                         '<div class="vue-datepicker-weekRange">' +
                             '<span v-repeat="w:weekRange">{{w}}</span>' +
@@ -175,7 +175,31 @@ VueUI.component('vue-datepicker', {
             weekRange : ['1', '2', '3', '4', '5', '6', '7'],
             dateRange : [], // we need to draw a date range
             currDate : new Date, // the current date
-            popupDisplay : 'none'
+            popupDisplay : 'none',
+            monthTH : [
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคา', 
+                'เมษายน', 'พฤษภาคม', 'มิถุนายน', 
+                'กรกฎาคม', 'สิงหาคม', 'กันยายน', 
+                'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
+            ],
+            shortMonthTH : [
+                'ม.ค.', 'ก.พ.', 'มี.ค.', 
+                'เม.ย.', 'พ.ค.', 'มิ.ย.', 
+                'ก.ค.', 'ส.ค.', 'ก.ย.', 
+                'ต.ค.', 'พ.ย.', 'ธ.ค.'
+            ],
+            monthEN : [
+                'January', 'February', 'March', 
+                'April', 'May', 'June', 
+                'July', 'August', 'September', 
+                'October', 'November', 'December'
+            ],
+            shortMonthEN : [
+                'Jan', 'Feb', 'Mar',
+                'Apr', 'May', 'Jun',
+                'Jul', 'Aug', 'Sep',
+                'Oct', 'Nov', 'Dec'
+            ]
         }
     },
     watch : {
@@ -224,19 +248,22 @@ VueUI.component('vue-datepicker', {
             return {year:year, month:month}
         },
         stringify : function (date, format){
-            format = format || 'yyyy-MM-dd'
+            format = format || '{dd} {mmm} {yyyy}'
 
             var year = date.getFullYear()
             var month = date.getMonth() + 1
             var day = date.getDate()
 
-            return format
-                .replace(/yyyy/g, year)
-                .replace(/MM/g, ('0'+month).slice(-2))
-                .replace(/dd/g, ('0'+day).slice(-2))
-                .replace(/yy/g, year)
-                .replace(/M/g, month)
-                .replace(/d/g, day)
+            var dt = format
+                .replace('{yyyy}', year)
+                .replace('{mmm}', this.monthEN[month-1])
+                .replace('{mm}', ('0'+month).slice(-2))
+                .replace('{dd}', ('0'+day).slice(-2))
+                .replace('{yy}', year)
+                .replace('{m}', month)
+                .replace('{d}', day)
+            console.log('date: ', date, 'format: ', dt)
+            return dt
         },
         parse : function (str){
             var date = new Date(str)

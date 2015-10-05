@@ -12,75 +12,20 @@
         <vue-datepicker v-with="config:datepickerConf" vue-model="sDate"></vue-datepicker>
         <vue-datepicker v-with="config:datepickerConf" vue-model="sDate2"></vue-datepicker>
         
-        <vue-table v-with="config:tableConf" vue-id="myTable"></vue-table>
-
     </body>
 </html>
-<script src="../../lib/jquery.js"></script>
-<script src="../../lib/vue.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.0.0-alpha1/jquery.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/vue/0.12.16/vue.min.js"></script>
 <script src="../../dist/vueUI.js"></script>
 
 <script>
-    var tableConf = {
-    //isShowHead : false,
-    //isShowFoot : false,
-    isCheckable : true,
-    columns : [
-        {'field':'name', 'isSortable':true},
-        'math',
-        'chinese',
-        {'field':'english', 'text':'text', 'textAlign':'left','isSortable':true},
-        'operate'
-    ],
-    onPagerChange : function (num){
-        getData(num)
-    },
-    onSortChange : function (field, dir){
-        console.log(field)
-        console.log(dir)
-    },
-    myAlert : function (num){
-        alert(num)
-    }
-}
 
-function _getData(pagerNum){
-    var myTable = VueUI.getComponent('myTable')
-
-    var data = []
-    for (var i=0; i<10; i++){
-        data.push(
-            {
-                name:pagerNum+'_’≈»˝'+i,
-                math:98,
-                chinese:90,
-                english:95,
-                operate:'<a href="javascript:;" v-on="click:myAlert(\'' + 98 +'\')">œÍ«È</a>'
-            }
-        )
-    }
-
-    myTable.data = data
-    myTable.totalPage = 10
-    myTable.totalCount = 234
-    myTable.onPagerChange = function (num){
-        getData(num)
-        console.log(pagerNum + '_' + num)
-    }
-}
-
-function getData(pagerNum){
-    setTimeout(function (){
-        _getData(pagerNum)
-    }, 100)
-}
 var datepickerConf = {}
 var x = new Vue({
     el : '#datepickerTest',
     data : {
         sDate : '2015-02-14',
-        sDate2 : '',
-        tableConf : tableConf
+        sDate2 : ''
     }
 })
 </script>
