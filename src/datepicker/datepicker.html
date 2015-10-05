@@ -9,7 +9,12 @@
         </style>
     </head>
     <body id="datepickerTest" style="padding:100px">
-        <vue-datepicker v-with="config:datepickerConf" vue-model="sDate" prompt="เลือกวัน" date-label="{mmm} {yyyy}"></vue-datepicker>
+        <vue-datepicker 
+            v-with="config:datepickerConf" 
+            vue-model="sDate" 
+            prompt="เลือกวัน" 
+            date-label="{mmmm:th} {yyyy:th}">
+        </vue-datepicker>
         <vue-datepicker v-with="config:datepickerConf" vue-model="sDate2"></vue-datepicker>
         
     </body>

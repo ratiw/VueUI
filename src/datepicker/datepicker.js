@@ -125,12 +125,12 @@ VueUI.component('vue-datepicker', {
             var day = date.getDate()
 
             var dt = format
+                .replace('{yyyy:th}', year + 543)
                 .replace('{yyyy}', year)
-                .replace('{yyyy:th', year + 543)
-                .replace('{mmmm}', this.month[month-1])
                 .replace('{mmmm:th}', this.monthTH[month-1])
+                .replace('{mmmm}', this.month[month-1])
+                .replace('{mmm:th}', this.shortMonthTH[month-1])
                 .replace('{mmm}', this.shortMonth[month-1])
-                .replace('{mmm:th', this.shortMonthTH[month-1])
                 .replace('{mm}', ('0'+month).slice(-2))
                 .replace('{dd}', ('0'+day).slice(-2))
                 .replace('{yy}', year)
