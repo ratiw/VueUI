@@ -1,44 +1,44 @@
-// 引入 gulp
+// Load gulp
 var gulp = require('gulp');
 
-// 引入组件
+// Load components
 var jshint = require('gulp-jshint');
 var sass = require('gulp-sass');
 var concat = require('gulp-concat');
 var uglify = require('gulp-uglify');
 var rename = require('gulp-rename');
 
-// 检查脚本
+// Check scripts
 gulp.task('lint', function() {
     gulp.src('./src/*.js')
         .pipe(jshint())
         .pipe(jshint.reporter('default'));
 });
 
-// 合并css文件
+// Merge css files
 gulp.task('csss', function() {
     gulp.src('./src/**/*.css')
         .pipe(concat('vueUI.css'))
         .pipe(gulp.dest('./dist'));
 });
 
-// 合并js文件
+// Merge js files
 gulp.task('scripts', function() {
     gulp.src('./src/**/*.js')
         .pipe(concat('vueUI.js'))
         .pipe(gulp.dest('./dist'));
 });
 
-// 默认任务
+// Default task
 gulp.task('default', function(){
     gulp.run('csss', 'scripts');
 
-    // 监听文件变化
+    // Monitor file changes
     gulp.watch('./src/**/*.js', function(){
         gulp.run('scripts');
     });
 
-    // 监听文件变化
+    // Monitor file changes
     gulp.watch('./src/**/*.css', function(){
         gulp.run('csss');
     });

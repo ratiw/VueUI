@@ -9,7 +9,7 @@ VueUI.component('vue-datepicker', {
             '<div class="vue-datepicker-popup" v-style="display:popupDisplay">' +
                 '<div class="vue-datepicker-inner">' +
                     '<div class="vue-datepicker-head">' +
-                        '<div class="vue-datepicker-label">选择日期</div>' +
+                        '<div class="vue-datepicker-label">Select date</div>' +
                     '</div>' +
                     '<div class="vue-datepicker-body">' +
                         '<div class="vue-datepicker-ctrl">' +
@@ -33,9 +33,9 @@ VueUI.component('vue-datepicker', {
         return {
             config : {},
             value : '',
-            weekRange : ['一', '二', '三', '四', '五', '六', '日'],
-            dateRange : [], //需要绘制的日期区间
-            currDate : new Date, //当前日期
+            weekRange : ['1', '2', '3', '4', '5', '6', '7'],
+            dateRange : [], // we need to draw a date range
+            currDate : new Date, // the current date
             popupDisplay : 'none'
         }
     },
@@ -103,12 +103,12 @@ VueUI.component('vue-datepicker', {
             var date = new Date(str)
             return isNaN(date.getFullYear()) ? null : date
         },
-        getDayCount : function (year, month){ //得到每月总天数
+        getDayCount : function (year, month){ //return the total number of days per month
             var dict = [31,28,31,30,31,30,31,31,30,31,30,31]
 
-            //如果2月
+            //if February
             if (month == 1){
-                //如果瑞年
+                // check if it's the leap year
                 if ( (year%400==0) || (year%4==0 && year%100!=0) ){
                     return 29
                 }
@@ -125,21 +125,21 @@ VueUI.component('vue-datepicker', {
                 month : this.currDate.getMonth(),
                 day : this.currDate.getDate()
             }
-            //本月第一天
+            //the first day of the month
             var currMonthFirstDay = new Date(time.year, time.month, 1)
-            //本月第一天是周几？
+            //check current month if it's the first day of the week?
             var firstDayWeek = currMonthFirstDay.getDay()
             if (firstDayWeek == 0){
                 firstDayWeek = 7
             }
-            //本月总天数
+            //the total number of days in this month
             var dayCount = this.getDayCount(time.year, time.month)
 
-            //如果需要补足上月
+            //If you need to make up last month
             if (firstDayWeek > 1){
                 var preMonth = this.getYearMonth(time.year, time.month-1)
 
-                //上月总天数
+                //the total number of days in last month
                 var prevMonthDayCount = this.getDayCount(preMonth.year, preMonth.month)
                 for (var i=1; i<firstDayWeek; i++){
                     var dayText = prevMonthDayCount - firstDayWeek + i + 1
@@ -151,7 +151,7 @@ VueUI.component('vue-datepicker', {
                 }
             }
 
-            //本月
+            //this month
             for (var i=1; i<=dayCount; i++){
                 var date = new Date(time.year, time.month, i)
                 var week = date.getDay()
@@ -159,14 +159,14 @@ VueUI.component('vue-datepicker', {
                 if (week==6 || week==0){
                     sclass = 'vue-datepicker-item-red'
                 }
-                //如果日子和当前相等
+                // if i == current day
                 if (i==time.day){
-                    //如果value有值
+                    // if value is not null
                     if (this.value){
                         var valueDate = this.parse(this.value)
-                        //如果value是有效的日期
+                        // if the value is a valid date
                         if (valueDate){
-                            //如果value的年和月和当前相等
+                            // if it's the current date
                             if (valueDate.getFullYear() == time.year && valueDate.getMonth() == time.month){
                                 sclass = 'vue-datepicker-dateRange-item-hover'
                             }
@@ -180,9 +180,9 @@ VueUI.component('vue-datepicker', {
                 })
             }
 
-            //如果需要补足下个月
+            // If you need to make up for next month
             if (this.dateRange.length < 42){
-                //需要补足的天数
+                //The number of days required to make up
                 var nextMonthNeed = 42 - this.dateRange.length
                 var nextMonth = this.getYearMonth(time.year, time.month+1)
 

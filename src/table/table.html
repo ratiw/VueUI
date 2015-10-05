@@ -1,5 +1,5 @@
 <!DOCTYPE html>
-<html lang="zh-cn">
+<html lang="en">
     <head>
         <meta charset="utf-8"/>
         <title>VueUI-table</title>
@@ -18,8 +18,8 @@
             <div>{{a}}</div>
         </div >
         
-        <button class="btn btn-default" v-on="click:getData">获取数据</button>
-        <button class="btn btn-default" v-on="click:clearData">清空数据</button>
+        <button class="btn btn-default" v-on="click:getData">Get Data</button>
+        <button class="btn btn-default" v-on="click:clearData">Clear Data</button>
     </body>
 </html>
 <script src="../../lib/jquery.js"></script>
@@ -34,7 +34,7 @@ var tableConf = {
         {'field':'name', 'isSortable':true, 'textAlign':'center', 'textAlign2':'left'},
         'math',
         'chinese',
-        {'field':'english', 'text':'英语', 'textAlign2':'center','isSortable':true},
+        {'field':'english', 'text':'English', 'textAlign2':'center','isSortable':true},
         'operate'
     ],
     onPagerChange : function (num){
@@ -57,11 +57,11 @@ function _getData(pagerNum){
     for (var i=0; i<10; i++){
         data.push(
             {
-                name:pagerNum+'_张三'+i,
+                name:pagerNum+'Joe Smith'+i,
                 math:98,
                 chinese:90,
                 english:95,
-                operate:'<a href="javascript:;" v-on="click:myAlert(\'' + 98 +'\')">详情</a>'
+                operate:'<a href="javascript:;" v-on="click:myAlert(\'' + 98 +'\')">detail...</a>'
             }
         )
     }
