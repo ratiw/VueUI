@@ -3,7 +3,7 @@
 */
 
 VueUI.component('vue-datepicker', {
-    props: ['prompt', 'dateLabel'],
+    props: ['prompt', 'dateLabel', 'value'],
 
     template :
         '<div class="vue-datepicker">' +
@@ -68,16 +68,17 @@ VueUI.component('vue-datepicker', {
             ]
         }
     },
+    ready : function() {
+        var valueDate = this.parse(this.value)
+        console.log('watch value: ', valueDate)
+        if (valueDate){
+            this.currDate = valueDate
+        }
+    },
     watch : {
         currDate : function (){
             this.getDateRange()
         },
-        value : function (){
-            var valueDate = this.parse(this.value)
-            if (valueDate){
-                this.currDate = valueDate
-            }
-        }
     },
     methods : {
         inputClick : function (e){

@@ -27,7 +27,7 @@ window.VueUI = function (){
         }, true)
     }
 
-    //处理vue-attr
+    // processing vue-attr
     function handleVueAttr(){
         var me = this
 
@@ -41,7 +41,7 @@ window.VueUI = function (){
         })
     }
 
-    //处理vue-model
+    // processing vue-model
     function handleVueModel(){
         var me = this
 
@@ -85,7 +85,7 @@ window.VueUI = function (){
         var _compiled = options['compiled'] || VueUI.emptyFunc
 
         options['compiled'] = function (){
-            //设置id，并保存到pool
+            // set it, save to pool
             var comId = this.$el.getAttribute('vue-id') || getComId()
             componentPool[comId] = this
 
@@ -96,7 +96,7 @@ window.VueUI = function (){
 
             _compiled.call(this)
         }
-        //调用系统的方式
+        // call the system
         Vue.component(key, options)
     }
 

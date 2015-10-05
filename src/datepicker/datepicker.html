@@ -11,11 +11,11 @@
     <body id="datepickerTest" style="padding:100px">
         <vue-datepicker 
             v-with="config:datepickerConf" 
-            vue-model="sDate" 
+            value="2015-09-12" 
             prompt="เลือกวัน" 
             date-label="{mmmm:th} {yyyy:th}">
         </vue-datepicker>
-        <vue-datepicker v-with="config:datepickerConf" vue-model="sDate2"></vue-datepicker>
+        <vue-datepicker v-with="config:datepickerConf" value="{{sDate2}}"></vue-datepicker>
         
     </body>
 </html>
