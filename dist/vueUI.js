@@ -141,6 +141,130 @@ window.VueUI = function (){
     Copyright (c) 2015 bravf(bravfing@126.com)
 */
 
+VueUI.component('vue-pager', {
+    template :
+    '<div class="vue-pager">' +
+        '<ul class="pagination pagination-sm vue-pager-pagination">' +
+            '<li v-repeat="pageRange" v-on="click:pageClick(num)" v-class="className">' +
+                '<a href="javascript:;">{{text}}</a>' +
+            '</li>' +
+        '</ul>' +
+    '</div>',
+    data : function (){
+        return {
+            pageRange : [],
+            totalPage : 0,
+            currPage : 1,
+            prevShow : 3,
+            nextShow : 3,
+            onChange : VueUI.emptyFunc,
+            config : {}
+        }
+    },
+    watch : {
+        totalPage : function (){
+            this.getPageRange()
+        },
+        currPage : function (){
+            this.getPageRange()
+            this.onChange(this.currPage)
+        },
+        prevShow : function (){
+            this.getPageRange()
+        },
+        nextShow : function (){
+            this.getPageRange()
+        }
+    },
+    methods : {
+        getPageRange : function (){
+            var start = 0
+            var end = 0
+            var showLen = this.prevShow + this.nextShow + 1
+            var totalPage = Math.max(this.totalPage, 1)
+            var currPage = this.currPage
+
+            if (totalPage <= 1){
+                start = end = 1
+            }
+            else if (totalPage <= showLen){
+                start = 1
+                end = totalPage
+            }
+            else {
+                if (currPage <= this.prevShow + 1){
+                    start = 1
+                    end = showLen
+                }
+                else if (currPage >= totalPage - this.nextShow){
+                    end = totalPage
+                    start = totalPage - showLen + 1
+                }
+                else {
+                    start = currPage - this.prevShow
+                    end = currPage + this.nextShow
+                }
+            }
+
+            this.pageRange = []
+
+            //上一页
+            if (currPage != 1){
+                this.pageRange.push({num:currPage-1, text:'«'})
+            }
+            //第一页
+            if (start >= 2){
+                this.pageRange.push({num:1, text:1})
+            }
+            //省略好
+            if (start > 2){
+                this.pageRange.push({text:'..'})
+            }
+            //显示的页码列表
+            for (var i=start; i<=end; i++){
+                this.pageRange.push({
+                    num : i,
+                    text : i,
+                    className : (i==currPage) ? 'active' : ''
+                })
+            }
+            //省略号
+            if (end < totalPage-1){
+                this.pageRange.push({text:'..'})
+            }
+            //最后一页
+            if (end <= totalPage-1){
+                this.pageRange.push({num:totalPage, text:totalPage})
+            }
+            //下一页
+            if (currPage != totalPage){
+                this.pageRange.push({num:currPage+1, text:'»'})
+            }
+        },
+        pageClick : function (i){
+            if (!i){
+                return false
+            }
+            if (i == this.currPage){
+                return false
+            }
+
+            this.currPage = i
+            this.getPageRange()
+        }
+    },
+    compiled : function (){
+        this.getPageRange()
+    }
+})
+/*
+    based on the work of bravf(bravfing@126.com)
+    Todo
+     - locale option (th/en)
+     - data format (yyyy-mm-dd)
+     - display format (dd/mm/yyyy)
+*/
+
 VueUI.component('vue-datepicker', {
     props: ['prompt', 'dateLabel', 'value'],
 
@@ -182,9 +306,9 @@ VueUI.component('vue-datepicker', {
             currDate : new Date, // the current date
             popupDisplay : 'none',
             month : [
-                'January', 'February', 'March', 
-                'April', 'May', 'June', 
-                'July', 'August', 'September', 
+                'January', 'February', 'March',
+                'April', 'May', 'June',
+                'July', 'August', 'September',
                 'October', 'November', 'December'
             ],
             shortMonth : [
@@ -194,15 +318,15 @@ VueUI.component('vue-datepicker', {
                 'Oct', 'Nov', 'Dec'
             ],
             monthTH : [
-                'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 
-                'เมษายน', 'พฤษภาคม', 'มิถุนายน', 
-                'กรกฎาคม', 'สิงหาคม', 'กันยายน', 
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคม',
+                'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                'กรกฎาคม', 'สิงหาคม', 'กันยายน',
                 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
             ],
             shortMonthTH : [
-                'ม.ค.', 'ก.พ.', 'มี.ค.', 
-                'เม.ย.', 'พ.ค.', 'มิ.ย.', 
-                'ก.ค.', 'ส.ค.', 'ก.ย.', 
+                'ม.ค.', 'ก.พ.', 'มี.ค.',
+                'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                'ก.ค.', 'ส.ค.', 'ก.ย.',
                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
             ]
         }
@@ -243,7 +367,7 @@ VueUI.component('vue-datepicker', {
         },
         itemClick : function (date){
             this.currDate = date
-            this.value = this.stringify(this.currDate)
+            this.value = this.stringify(this.currDate, '{dd}-{mm}-{yyyy}')
             this.popupDisplay = 'none'
         },
         getYearMonth : function (year, month){
@@ -383,260 +507,6 @@ VueUI.component('vue-datepicker', {
         VueUI.winClick(me.$el, function (){
             me.popupDisplay = 'none'
         })
-    }
-})
-/*
-    Copyright (c) 2015 bravf(bravfing@126.com)
-*/
-
-VueUI.component('vue-modal', {
-    template :
-        '<div class="modal vue-modal" v-show="toggle">' +
-            '<div class="modal-backdrop fade in vue-modal-backdrop"></div>' +
-            '<div class="modal-dialog" v-style="width:width+\'px\'">' +
-                '<div class="modal-content">' +
-                    '<div class="modal-header">' +
-                        '<button type="button" class="close" v-on="click:toggle=false"><span aria-hidden="true">×</span></button>' +
-                        '<h4 class="modal-title">{{title}}</h4>' +
-                    '</div>' +
-                    '<div class="modal-body">' +
-                        '{{{content}}}' +
-                        '<content></content>' +
-                    '</div>' +
-                    '<div class="modal-footer" v-show="isShowCancelBtn || isShowOkBtn">' +
-                        '<button type="button" class="btn btn-default" v-on="click:cancelBtnClick" v-show="isShowCancelBtn">{{cancelBtnText}}</button>' +
-                        '<button type="button" class="btn btn-primary" v-on="click:okBtnClick" v-show="isShowOkBtn">{{okBtnText}}</button>' +
-                    '</div>' +
-                '</div>' +
-            '</div>' +
-        '</div>'
-    ,
-    data : function (){
-        return {
-            config : {},
-
-            title : '', //标题
-            content : '', //内容
-            toggle : false, //是否显示
-            width : 500, //宽度
-
-            // 按钮相关
-            isShowCancelBtn : false,
-            cancelBtnText : '取消',
-            cancelBtnCallback : VueUI.emptyFunc,
-
-            isShowOkBtn : false,
-            okBtnText : '确认',
-            okBtnCallback : VueUI.emptyFunc,
-        }
-    },
-    watch : {
-        content : function (){
-            this.$compile(this.$el.querySelector('.modal-body'))
-        },
-        title : function (){
-            this.title = this.title || document.title
-        },
-        toggle : function (){
-            if (this.toggle){
-                this.syncHeight()
-            }
-
-            document.body.style.overflow = this.toggle ? 'hidden' : 'auto'
-        }
-    },
-    methods : {
-        cancelBtnClick : function (){
-            this.toggle = false
-            this.cancelBtnCallback()
-        },
-        okBtnClick : function (){
-            this.toggle = false
-            this.okBtnCallback()
-        },
-        syncHeight : function (){
-            var height = Math.max(this.$$el.find('.modal-dialog').height() + 60, document.documentElement.clientHeight)
-            this.$backdrop.height(height)
-        },
-        show : function (){
-            this.toggle = true
-        },
-        hide : function (){
-            this.toggle = false
-        }
-    },
-    compiled : function (){
-        this.title = this.title || document.title
-
-        this.$$el = $(this.$el)
-        this.$backdrop = this.$$el.find('.vue-modal-backdrop')
-    }
-})
-
-new function (){
-    var str =
-    '<div id="VueUIAlertConfirm">' +
-        '<vue-modal vue-id="VueUIAlert" v-with="config:VueUIAlertConf"></vue-modal>' +
-        '<vue-modal vue-id="VueUIConfirm" v-with="config:VueUIConfirmConf"></vue-modal>' +
-    '</div>'
-    $('body').append(str)
-
-    new Vue({
-        el : '#VueUIAlertConfirm',
-        data : {
-            VueUIAlertConf : {
-                isShowOkBtn : true
-            },
-            VueUIConfirmConf : {
-                isShowOkBtn : true,
-                isShowCancelBtn : true
-            }
-        }
-    })
-
-    var alertVU = VueUI.getComponent('VueUIAlert')
-    var confirmVU = VueUI.getComponent('VueUIConfirm')
-
-    VueUI.alert = function (conf){
-        if ($.type(conf) == 'object'){
-            alertVU.title = conf.title
-            alertVU.content = conf.content || ''
-            alertVU.okBtnCallback = conf.okCallback || VueUI.emptyFunc
-        }
-        else {
-            alertVU.content = conf
-            alertVU.title = document.title
-            alertVU.okBtnCallback = VueUI.emptyFunc
-        }
-        alertVU.toggle = true
-    }
-
-    VueUI.confirm = function (conf){
-        confirmVU.title = conf.title
-        confirmVU.content = conf.content || '',
-        confirmVU.okBtnCallback = conf.okCallback || VueUI.emptyFunc
-        confirmVU.cancelBtnCallback = conf.cancelCallback || VueUI.emptyFunc
-        confirmVU.toggle = true
-    }
-}()
-/*
-    Copyright (c) 2015 bravf(bravfing@126.com)
-*/
-
-VueUI.component('vue-pager', {
-    template :
-    '<div class="vue-pager">' +
-        '<ul class="pagination pagination-sm vue-pager-pagination">' +
-            '<li v-repeat="pageRange" v-on="click:pageClick(num)" v-class="className">' +
-                '<a href="javascript:;">{{text}}</a>' +
-            '</li>' +
-        '</ul>' +
-    '</div>',
-    data : function (){
-        return {
-            pageRange : [],
-            totalPage : 0,
-            currPage : 1,
-            prevShow : 3,
-            nextShow : 3,
-            onChange : VueUI.emptyFunc,
-            config : {}
-        }
-    },
-    watch : {
-        totalPage : function (){
-            this.getPageRange()
-        },
-        currPage : function (){
-            this.getPageRange()
-            this.onChange(this.currPage)
-        },
-        prevShow : function (){
-            this.getPageRange()
-        },
-        nextShow : function (){
-            this.getPageRange()
-        }
-    },
-    methods : {
-        getPageRange : function (){
-            var start = 0
-            var end = 0
-            var showLen = this.prevShow + this.nextShow + 1
-            var totalPage = Math.max(this.totalPage, 1)
-            var currPage = this.currPage
-
-            if (totalPage <= 1){
-                start = end = 1
-            }
-            else if (totalPage <= showLen){
-                start = 1
-                end = totalPage
-            }
-            else {
-                if (currPage <= this.prevShow + 1){
-                    start = 1
-                    end = showLen
-                }
-                else if (currPage >= totalPage - this.nextShow){
-                    end = totalPage
-                    start = totalPage - showLen + 1
-                }
-                else {
-                    start = currPage - this.prevShow
-                    end = currPage + this.nextShow
-                }
-            }
-
-            this.pageRange = []
-
-            //上一页
-            if (currPage != 1){
-                this.pageRange.push({num:currPage-1, text:'«'})
-            }
-            //第一页
-            if (start >= 2){
-                this.pageRange.push({num:1, text:1})
-            }
-            //省略好
-            if (start > 2){
-                this.pageRange.push({text:'..'})
-            }
-            //显示的页码列表
-            for (var i=start; i<=end; i++){
-                this.pageRange.push({
-                    num : i,
-                    text : i,
-                    className : (i==currPage) ? 'active' : ''
-                })
-            }
-            //省略号
-            if (end < totalPage-1){
-                this.pageRange.push({text:'..'})
-            }
-            //最后一页
-            if (end <= totalPage-1){
-                this.pageRange.push({num:totalPage, text:totalPage})
-            }
-            //下一页
-            if (currPage != totalPage){
-                this.pageRange.push({num:currPage+1, text:'»'})
-            }
-        },
-        pageClick : function (i){
-            if (!i){
-                return false
-            }
-            if (i == this.currPage){
-                return false
-            }
-
-            this.currPage = i
-            this.getPageRange()
-        }
-    },
-    compiled : function (){
-        this.getPageRange()
     }
 })
 /*
@@ -818,6 +688,140 @@ VueUI.component('vue-select', {
         })
     }
 })
+/*
+    Copyright (c) 2015 bravf(bravfing@126.com)
+*/
+
+VueUI.component('vue-modal', {
+    template :
+        '<div class="modal vue-modal" v-show="toggle">' +
+            '<div class="modal-backdrop fade in vue-modal-backdrop"></div>' +
+            '<div class="modal-dialog" v-style="width:width+\'px\'">' +
+                '<div class="modal-content">' +
+                    '<div class="modal-header">' +
+                        '<button type="button" class="close" v-on="click:toggle=false"><span aria-hidden="true">×</span></button>' +
+                        '<h4 class="modal-title">{{title}}</h4>' +
+                    '</div>' +
+                    '<div class="modal-body">' +
+                        '{{{content}}}' +
+                        '<content></content>' +
+                    '</div>' +
+                    '<div class="modal-footer" v-show="isShowCancelBtn || isShowOkBtn">' +
+                        '<button type="button" class="btn btn-default" v-on="click:cancelBtnClick" v-show="isShowCancelBtn">{{cancelBtnText}}</button>' +
+                        '<button type="button" class="btn btn-primary" v-on="click:okBtnClick" v-show="isShowOkBtn">{{okBtnText}}</button>' +
+                    '</div>' +
+                '</div>' +
+            '</div>' +
+        '</div>'
+    ,
+    data : function (){
+        return {
+            config : {},
+
+            title : '', //标题
+            content : '', //内容
+            toggle : false, //是否显示
+            width : 500, //宽度
+
+            // 按钮相关
+            isShowCancelBtn : false,
+            cancelBtnText : '取消',
+            cancelBtnCallback : VueUI.emptyFunc,
+
+            isShowOkBtn : false,
+            okBtnText : '确认',
+            okBtnCallback : VueUI.emptyFunc,
+        }
+    },
+    watch : {
+        content : function (){
+            this.$compile(this.$el.querySelector('.modal-body'))
+        },
+        title : function (){
+            this.title = this.title || document.title
+        },
+        toggle : function (){
+            if (this.toggle){
+                this.syncHeight()
+            }
+
+            document.body.style.overflow = this.toggle ? 'hidden' : 'auto'
+        }
+    },
+    methods : {
+        cancelBtnClick : function (){
+            this.toggle = false
+            this.cancelBtnCallback()
+        },
+        okBtnClick : function (){
+            this.toggle = false
+            this.okBtnCallback()
+        },
+        syncHeight : function (){
+            var height = Math.max(this.$$el.find('.modal-dialog').height() + 60, document.documentElement.clientHeight)
+            this.$backdrop.height(height)
+        },
+        show : function (){
+            this.toggle = true
+        },
+        hide : function (){
+            this.toggle = false
+        }
+    },
+    compiled : function (){
+        this.title = this.title || document.title
+
+        this.$$el = $(this.$el)
+        this.$backdrop = this.$$el.find('.vue-modal-backdrop')
+    }
+})
+
+new function (){
+    var str =
+    '<div id="VueUIAlertConfirm">' +
+        '<vue-modal vue-id="VueUIAlert" v-with="config:VueUIAlertConf"></vue-modal>' +
+        '<vue-modal vue-id="VueUIConfirm" v-with="config:VueUIConfirmConf"></vue-modal>' +
+    '</div>'
+    $('body').append(str)
+
+    new Vue({
+        el : '#VueUIAlertConfirm',
+        data : {
+            VueUIAlertConf : {
+                isShowOkBtn : true
+            },
+            VueUIConfirmConf : {
+                isShowOkBtn : true,
+                isShowCancelBtn : true
+            }
+        }
+    })
+
+    var alertVU = VueUI.getComponent('VueUIAlert')
+    var confirmVU = VueUI.getComponent('VueUIConfirm')
+
+    VueUI.alert = function (conf){
+        if ($.type(conf) == 'object'){
+            alertVU.title = conf.title
+            alertVU.content = conf.content || ''
+            alertVU.okBtnCallback = conf.okCallback || VueUI.emptyFunc
+        }
+        else {
+            alertVU.content = conf
+            alertVU.title = document.title
+            alertVU.okBtnCallback = VueUI.emptyFunc
+        }
+        alertVU.toggle = true
+    }
+
+    VueUI.confirm = function (conf){
+        confirmVU.title = conf.title
+        confirmVU.content = conf.content || '',
+        confirmVU.okBtnCallback = conf.okCallback || VueUI.emptyFunc
+        confirmVU.cancelBtnCallback = conf.cancelCallback || VueUI.emptyFunc
+        confirmVU.toggle = true
+    }
+}()
 /*
     Copyright (c) 2015 bravf(bravfing@126.com)
 */

@@ -1,5 +1,9 @@
 /*
-    Copyright (c) 2015 bravf(bravfing@126.com)
+    based on the work of bravf(bravfing@126.com)
+    Todo
+     - locale option (th/en)
+     - data format (yyyy-mm-dd)
+     - display format (dd/mm/yyyy)
 */
 
 VueUI.component('vue-datepicker', {
@@ -43,9 +47,9 @@ VueUI.component('vue-datepicker', {
             currDate : new Date, // the current date
             popupDisplay : 'none',
             month : [
-                'January', 'February', 'March', 
-                'April', 'May', 'June', 
-                'July', 'August', 'September', 
+                'January', 'February', 'March',
+                'April', 'May', 'June',
+                'July', 'August', 'September',
                 'October', 'November', 'December'
             ],
             shortMonth : [
@@ -55,15 +59,15 @@ VueUI.component('vue-datepicker', {
                 'Oct', 'Nov', 'Dec'
             ],
             monthTH : [
-                'มกราคม', 'กุมภาพันธ์', 'มีนาคม', 
-                'เมษายน', 'พฤษภาคม', 'มิถุนายน', 
-                'กรกฎาคม', 'สิงหาคม', 'กันยายน', 
+                'มกราคม', 'กุมภาพันธ์', 'มีนาคม',
+                'เมษายน', 'พฤษภาคม', 'มิถุนายน',
+                'กรกฎาคม', 'สิงหาคม', 'กันยายน',
                 'ตุลาคม', 'พฤศจิกายน', 'ธันวาคม'
             ],
             shortMonthTH : [
-                'ม.ค.', 'ก.พ.', 'มี.ค.', 
-                'เม.ย.', 'พ.ค.', 'มิ.ย.', 
-                'ก.ค.', 'ส.ค.', 'ก.ย.', 
+                'ม.ค.', 'ก.พ.', 'มี.ค.',
+                'เม.ย.', 'พ.ค.', 'มิ.ย.',
+                'ก.ค.', 'ส.ค.', 'ก.ย.',
                 'ต.ค.', 'พ.ย.', 'ธ.ค.'
             ]
         }
@@ -104,7 +108,7 @@ VueUI.component('vue-datepicker', {
         },
         itemClick : function (date){
             this.currDate = date
-            this.value = this.stringify(this.currDate)
+            this.value = this.stringify(this.currDate, '{dd}-{mm}-{yyyy}')
             this.popupDisplay = 'none'
         },
         getYearMonth : function (year, month){
