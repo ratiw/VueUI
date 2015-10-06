@@ -7,7 +7,7 @@
 */
 
 VueUI.component('vue-datepicker', {
-    props: ['prompt', 'dateLabel', 'value'],
+    props: ['prompt', 'dateLabel', 'dateFormat', 'value'],
 
     template :
         '<div class="vue-datepicker">' +
@@ -41,6 +41,7 @@ VueUI.component('vue-datepicker', {
             value : '',
             prompt : 'Select date',
             dateLabel : '{mmmm} {yyyy}',
+            dateFormat : '{yyyy}-{mm}-{dd}',
             weekRange : ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
             weekRangeTH : ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส', 'อา'],
             dateRange : [], // we need to draw a date range
@@ -74,7 +75,6 @@ VueUI.component('vue-datepicker', {
     },
     ready : function() {
         var valueDate = this.parse(this.value)
-        console.log('watch value: ', valueDate)
         if (valueDate){
             this.currDate = valueDate
         }
@@ -108,7 +108,7 @@ VueUI.component('vue-datepicker', {
         },
         itemClick : function (date){
             this.currDate = date
-            this.value = this.stringify(this.currDate, '{dd}-{mm}-{yyyy}')
+            this.value = this.stringify(this.currDate, this.dateFormat)
             this.popupDisplay = 'none'
         },
         getYearMonth : function (year, month){

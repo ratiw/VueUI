@@ -78,6 +78,20 @@
     right: 4px;
 }
 
+.vue-modal{
+    display: block;
+    overflow-x: hidden;
+    overflow-y: auto;
+}
+.vue-modal-backdrop{
+    position: absolute;
+}
+.vue-pager{
+    font-size: 0;
+}
+.vue-pager-pagination{
+    margin: 0;
+}
 .vue-select{
     position: relative;
     height: 34px;
@@ -136,14 +150,6 @@
     transform:scaleY(-1);
     -webkit-transform:scaleY(-1);
 }
-.vue-modal{
-    display: block;
-    overflow-x: hidden;
-    overflow-y: auto;
-}
-.vue-modal-backdrop{
-    position: absolute;
-}
 .vue-suggest{
     position: relative;
     display: inline-block;
@@ -179,12 +185,6 @@
 }
 .vue-suggest-option-curr{
     background: #f5f5f5;
-}
-.vue-pager{
-    font-size: 0;
-}
-.vue-pager-pagination{
-    margin: 0;
 }
 .vue-tab-content{
     display: none;
