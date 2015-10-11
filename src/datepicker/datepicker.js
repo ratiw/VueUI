@@ -16,7 +16,7 @@ VueUI.component('vue-datepicker', {
             '</div>' +
             '<div class="vue-datepicker-popup" v-style="display:popupDisplay">' +
                 '<div class="vue-datepicker-inner">' +
-                    '<div class="vue-datepicker-head">' +
+                    '<div v-show="prompt" class="vue-datepicker-head">' +
                         '<div class="vue-datepicker-label">{{prompt}}</div>' +
                     '</div>' +
                     '<div class="vue-datepicker-body">' +
@@ -41,7 +41,7 @@ VueUI.component('vue-datepicker', {
         return {
             config : {},
             value : '',
-            prompt : 'Select date',
+            prompt : '',
             dateLabel : '{mmmm} {yyyy}',
             dateFormat : '{yyyy}-{mm}-{dd}',
             weekRange : ['M', 'T', 'W', 'T', 'F', 'S', 'S'],

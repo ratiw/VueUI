@@ -155,7 +155,7 @@ VueUI.component('vue-datepicker', {
             '</div>' +
             '<div class="vue-datepicker-popup" v-style="display:popupDisplay">' +
                 '<div class="vue-datepicker-inner">' +
-                    '<div class="vue-datepicker-head">' +
+                    '<div v-show="prompt" class="vue-datepicker-head">' +
                         '<div class="vue-datepicker-label">{{prompt}}</div>' +
                     '</div>' +
                     '<div class="vue-datepicker-body">' +
@@ -180,7 +180,7 @@ VueUI.component('vue-datepicker', {
         return {
             config : {},
             value : '',
-            prompt : 'Select date',
+            prompt : '',
             dateLabel : '{mmmm} {yyyy}',
             dateFormat : '{yyyy}-{mm}-{dd}',
             weekRange : ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
@@ -994,6 +994,44 @@ VueUI.component('vue-suggest', {
     Copyright (c) 2015 bravf(bravfing@126.com)
 */
 
+VueUI.component('vue-tab', {
+    template : '<div class="vue-tab"><content></content></div>',
+    data : function (){
+        return {
+            config : {},
+            active : 0
+        }
+    },
+    watch : {
+        active : function (){
+            this.setActive()
+        }
+    },
+    methods : {
+        setActive : function (){
+            this.$tabs.removeClass('active').eq(this.active).addClass('active')
+            this.$contents.removeClass('active').eq(this.active).addClass('active')
+        }
+    },
+    compiled : function (){
+        var me = this
+        this.$$el = $(this.$el)
+        this.$tabs = this.$$el.find('.nav li')
+        this.$contents = this.$$el.find('.tab-pane')
+
+        this.$tabs.each(function (idx){
+            $(this).on('click', function (){
+                me.active = idx
+            })
+        })
+
+        this.setActive()
+    }
+})
+/*
+    Copyright (c) 2015 bravf(bravfing@126.com)
+*/
+
 VueUI.component('vue-table', {
     template :
         '<table class="table table-bordered table-hover vue-table">' +
@@ -1188,43 +1226,5 @@ VueUI.component('vue-table', {
         if (this.isCheckable){
             this.columnsLen ++
         }
-    }
-})
-/*
-    Copyright (c) 2015 bravf(bravfing@126.com)
-*/
-
-VueUI.component('vue-tab', {
-    template : '<div class="vue-tab"><content></content></div>',
-    data : function (){
-        return {
-            config : {},
-            active : 0
-        }
-    },
-    watch : {
-        active : function (){
-            this.setActive()
-        }
-    },
-    methods : {
-        setActive : function (){
-            this.$tabs.removeClass('active').eq(this.active).addClass('active')
-            this.$contents.removeClass('active').eq(this.active).addClass('active')
-        }
-    },
-    compiled : function (){
-        var me = this
-        this.$$el = $(this.$el)
-        this.$tabs = this.$$el.find('.nav li')
-        this.$contents = this.$$el.find('.tab-pane')
-
-        this.$tabs.each(function (idx){
-            $(this).on('click', function (){
-                me.active = idx
-            })
-        })
-
-        this.setActive()
     }
 })

@@ -73,6 +73,7 @@
 }
 .vue-datepicker-ctrl p{
     padding-top: 3px;
+    font-weight: bold;
 }
 .vue-month-btn{
 	font-weight: bold;

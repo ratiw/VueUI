@@ -12,11 +12,16 @@
         <vue-datepicker 
             v-with="config:datepickerConf" 
             value="2015-09-12" 
-            prompt="เลือกวัน" 
             date-label="{mmmm:th} {yyyy:th}"
-            date-format="{dd}/{mm}/{yyyy}">
+            date-format="{dd}/{mm}/{yyyy}"
+        >
         </vue-datepicker>
-        <vue-datepicker v-with="config:datepickerConf" value="{{sDate2}}"></vue-datepicker>
+        <vue-datepicker 
+            v-with="config:datepickerConf" 
+            value="{{sDate2}}"
+            prompt="Select a date"
+        >
+        </vue-datepicker>
         
     </body>
 </html>
