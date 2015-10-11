@@ -181,7 +181,6 @@ VueUI.component('vue-datepicker', {
             config : {},
             lang : 'en',
             value : '',
-            isoValue: '',
             prompt : '',
             dateLabel : '',
             dateFormat : '{yyyy}-{mm}-{dd}',
@@ -217,11 +216,7 @@ VueUI.component('vue-datepicker', {
         }
     },
     ready : function() {
-        var valueDate = this.parse(this.value)
-        if (valueDate){
-            this.currDate = valueDate
-            this.isoValue = valueDate
-        }
+        this.parseInputDate()
     },
     watch : {
         currDate : function (){
@@ -231,6 +226,15 @@ VueUI.component('vue-datepicker', {
     methods : {
         inputClick : function (e){
             this.popupDisplay = this.popupDisplay=='none' ? 'block' : 'none'
+            if (this.popupDisplay == 'block') {
+                this.parseInputDate()
+            }
+        },
+        parseInputDate: function() {
+            var valueDate = this.parse(this.value)
+            if (valueDate){
+                this.currDate = valueDate
+            }
         },
         displayDateLabel: function(date) {
             return this.stringify(date, this.getDateLabelPattern())
@@ -289,7 +293,6 @@ VueUI.component('vue-datepicker', {
                 .replace('{yy}', year)
                 .replace('{m}', month)
                 .replace('{d}', day)
-            console.log('date: ', date, 'format: ', dt)
             return dt
         },
         parse : function (str){
