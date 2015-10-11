@@ -40,6 +40,13 @@
 }
 .vue-datepicker-dateRange span:hover, .vue-datepicker-dateRange-item-hover{
     background-color : #dbebff;
+    border-radius: 3px;
+}
+.vue-datepicker-dateRange-item-current{
+    font-weight: bold;
+    background-color : #337ab7;
+    color: white;
+    border-radius: 3px;
 }
 .vue-datepicker-weekRange{
     border-bottom: 1px solid #ccc;
@@ -63,6 +70,9 @@
     position: absolute;
     cursor: pointer;
     top: 1px;
+}
+.vue-datepicker-ctrl p{
+    padding-top: 3px;
 }
 .vue-month-btn{
 	font-weight: bold;

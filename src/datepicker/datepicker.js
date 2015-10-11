@@ -11,7 +11,9 @@ VueUI.component('vue-datepicker', {
 
     template :
         '<div class="vue-datepicker">' +
-            '<input class="form-control vue-datepicker-input" type="text" v-on="click:inputClick" v-model="value"/>' +
+            '<div class="ui input">' +
+                '<input class="vue-datepicker-input" type="text" v-on="click:inputClick" v-model="value"/>' +
+            '</div>' +
             '<div class="vue-datepicker-popup" v-style="display:popupDisplay">' +
                 '<div class="vue-datepicker-inner">' +
                     '<div class="vue-datepicker-head">' +
@@ -19,8 +21,8 @@ VueUI.component('vue-datepicker', {
                     '</div>' +
                     '<div class="vue-datepicker-body">' +
                         '<div class="vue-datepicker-ctrl">' +
-                            '<i class="vue-month-btn vue-datepicker-preMonthBtn" v-on="click:preNextMonthClick(0)">&lt;</i>' +
-                            '<i class="vue-month-btn vue-datepicker-nextMonthBtn" v-on="click:preNextMonthClick(1)">&gt;</i>' +
+                            '<i class="vue-month-btn vue-datepicker-preMonthBtn large angle left icon" v-on="click:preNextMonthClick(0)"></i>' +
+                            '<i class="vue-month-btn vue-datepicker-nextMonthBtn large angle right icon" v-on="click:preNextMonthClick(1)"></i>' +
                             '<p>{{displayDateLabel(currDate)}}</p>' +
                         '</div>' +
                         '<div class="vue-datepicker-weekRange">' +
@@ -213,7 +215,7 @@ VueUI.component('vue-datepicker', {
                         if (valueDate){
                             // if it's the current date
                             if (valueDate.getFullYear() == time.year && valueDate.getMonth() == time.month){
-                                sclass = 'vue-datepicker-dateRange-item-hover'
+                                sclass = 'vue-datepicker-dateRange-item-current'
                             }
                         }
                     }
