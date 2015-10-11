@@ -36,6 +36,10 @@
 .vue-datepicker-item-red{
     color: #ff5555;
 }
+.vue-datepicker-item-today{
+    border-bottom: 3px double;
+    /*border-radius: 3px;*/
+}
 .vue-datepicker-dateRange span{
 }
 .vue-datepicker-dateRange span:hover, .vue-datepicker-dateRange-item-hover{

@@ -7,7 +7,7 @@
 */
 
 VueUI.component('vue-datepicker', {
-    props: ['prompt', 'dateLabel', 'dateFormat', 'value'],
+    props: ['prompt', 'dateLabel', 'dateFormat', 'value', 'lang'],
 
     template :
         '<div class="vue-datepicker">' +
@@ -26,7 +26,7 @@ VueUI.component('vue-datepicker', {
                             '<p>{{displayDateLabel(currDate)}}</p>' +
                         '</div>' +
                         '<div class="vue-datepicker-weekRange">' +
-                            '<span v-repeat="w:weekRange">{{w}}</span>' +
+                            '<span v-repeat="w:getWeekRange()">{{w}}</span>' +
                         '</div>' +
                         '<div class="vue-datepicker-dateRange">' +
                             '<span v-repeat="d:dateRange" v-class="d.sclass" v-on="click:itemClick(d.date)">{{d.text}}</span>' +
@@ -40,9 +40,11 @@ VueUI.component('vue-datepicker', {
         var today = new Date
         return {
             config : {},
+            lang : 'en',
             value : '',
+            isoValue: '',
             prompt : '',
-            dateLabel : '{mmmm} {yyyy}',
+            dateLabel : '',
             dateFormat : '{yyyy}-{mm}-{dd}',
             weekRange : ['M', 'T', 'W', 'T', 'F', 'S', 'S'],
             weekRangeTH : ['จ', 'อ', 'พ', 'พฤ', 'ศ', 'ส', 'อา'],
@@ -79,6 +81,7 @@ VueUI.component('vue-datepicker', {
         var valueDate = this.parse(this.value)
         if (valueDate){
             this.currDate = valueDate
+            this.isoValue = valueDate
         }
     },
     watch : {
@@ -91,8 +94,12 @@ VueUI.component('vue-datepicker', {
             this.popupDisplay = this.popupDisplay=='none' ? 'block' : 'none'
         },
         displayDateLabel: function(date) {
-            var pattern = this.dateLabel || "{mmm} {yyyy}"
-            return this.stringify(date, pattern)
+            return this.stringify(date, this.getDateLabelPattern())
+        },
+        getDateLabelPattern: function() {
+            if (this.dateLabel) return this.dateLabel;
+
+            return (this.lang == 'th') ? "{mmmm:th} {yyyy:th}" : "{mmmm} {yyyy}";
         },
         preNextMonthClick : function (flag){
             var year = this.currDate.getFullYear()
@@ -147,8 +154,20 @@ VueUI.component('vue-datepicker', {
             return dt
         },
         parse : function (str){
-            var date = new Date(str)
+            var date;
+            if (this.lang == 'th') {
+                date = this.parseThaiDate(str);
+                this.dateFormat = '{dd}/{mm}/{yyyy:th}';
+            } else {
+                date = new Date(str);
+                this.dateFormat = this.dateFormat || '{yyyy}-{mm}-{dd}';
+            }
+
             return isNaN(date.getFullYear()) ? null : date
+        },
+        parseThaiDate: function(str){
+            var d = str.split('/');
+            return new Date(d[2]-543, d[1]-1, d[0]);
         },
         getDayCount : function (year, month){ //return the total number of days per month
             var dict = [31,28,31,30,31,30,31,31,30,31,30,31]
@@ -172,6 +191,7 @@ VueUI.component('vue-datepicker', {
                 month : this.currDate.getMonth(),
                 day : this.currDate.getDate()
             }
+            var today = new Date;
             //the first day of the month
             var currMonthFirstDay = new Date(time.year, time.month, 1)
             //check current month if it's the first day of the week?
@@ -220,6 +240,9 @@ VueUI.component('vue-datepicker', {
                         }
                     }
                 }
+                if (i==today.getDate() && time.year == today.getFullYear() && time.month == today.getMonth()){
+                    sclass += ' vue-datepicker-item-today'
+                }
                 this.dateRange.push({
                     text : i,
                     date : date,
@@ -241,6 +264,9 @@ VueUI.component('vue-datepicker', {
                     })
                 }
             }
+        },
+        getWeekRange: function() {
+            return this.lang == 'th' ? this.weekRangeTH : this.weekRange;
         }
     },
     compiled : function (){
