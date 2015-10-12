@@ -1,9 +1,5 @@
 /*
     based on the work of bravf(bravfing@126.com)
-    Todo
-     - locale option (th/en)
-     - data format (yyyy-mm-dd)
-     - display format (dd/mm/yyyy)
 */
 
 VueUI.component('vue-datepicker', {
